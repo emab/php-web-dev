@@ -1,0 +1,89 @@
+{% extends 'page.twig' %}
+
+{% block css %}
+{# <link> for any other CSS files you need #}
+{% endblock css %}
+
+{% block scripts %}
+{# <script src=""></script> for any other JS files you need #}
+{% endblock scripts %}
+
+{% block setup %}
+{# Any javascript you need that is NOT run on load. NB you don't need <script></script> tags  here #}
+{% endblock setup %}
+
+{% block onload %}
+{# Any javascript you need that MUST run on load. NB you don't need <script></script> tags  here #}
+{% endblock onload %}
+
+{% block header %}
+    <div class="col-md-12">
+        <h1>My Uploads</h1>
+    </div>
+    <div class="col-md-10 col-md-offset-1">
+        <table class="table">
+            <thead>
+                <th>
+                    Description
+                </th>
+                <th>
+                    File Name
+                </th>
+                <th>
+                    Uploaded By
+                </th>
+                <th>
+                    Theme
+                </th>
+                <th>
+                    Hidden
+                </th>
+            </thead>
+            <tbody>
+                {% for f in context.fileInfo %}
+                    {% for t in context.themeStaff(context.user.getID) if f.theme_id == t.theme_id %}
+                        <tr>
+                            <td>
+                                {{f.description}}
+                            </td>
+                            <td>
+                                <a href="{{base}}{{context.getFilePath(f.upload_id)}}">{{context.getFileName(f.upload_id)}}</a>
+                            </td>
+                            <td>
+                                {{context.getUserLogin(f.user_id)}}
+                            </td>
+                            <td>
+                                {{context.getThemeName(f.theme_id)}}
+                            </td>
+                            <td>
+                                {% if f.hidden == 'on' %}
+                                    <i class="fa fa-check"></i>
+                                {% else %}
+                                    <i class="fa fa-close"></i>
+                                {% endif %}
+                            </td>
+                            <form action="#" method="post">
+                                <input type="hidden" name="hideshowfile" value="{{f.upload_id}}" />
+                                <td>
+                                    <button type="submit" name="save" class="btn btn-default">Hide/unhide</button>
+                                </td>
+                            </form>
+                            <form action="#" method="post">
+                                <input type="hidden" name="deletefile" value="{{f.upload_id}}" />
+                                <td>
+                                    <button type="submit" name="delete" class="btn btn-danger">Delete</button>
+                                </td>
+                            </form>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock header %}
+
+{% block main %}
+{% endblock main %}
+
+{% block footer %}
+{% endblock footer %}

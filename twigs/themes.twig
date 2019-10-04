@@ -1,0 +1,93 @@
+{% extends 'page.twig' %}
+
+{% import 'form.twig' as f %}
+{% block scripts %}
+    <script src="{{assets}}/js/selection.js"></script>
+{% endblock scripts %}
+
+{% block onload %}
+{% endblock onload %}
+
+{% block header %}
+{% endblock header %}
+
+{% block main %}
+    {% if context.isprojectstudent %}
+        <section class="row">
+            <div class="col-md-5">
+                <h2>Themes</h2>
+            </div>
+            <div class="col-md-8 col-md-offset-2">
+                <p>Please select your themes below:</p>
+                <form action="#" method="post" id="themeform" data-parsley-validate>
+                    <legend>Themes</legend>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                                <th>Theme 1</th>
+                                <th>Theme 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="themeform">
+                                <td>
+                                    <select name="theme[]" id="choice1" onchange="updateDropdown()" required="required">
+                                        <option disabled selected value display:none> -- First choice -- </option>
+                                        {% for t in context.themes %}
+                                            <option value="{{t.getID}}">{{t.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="theme[]" id="choice2" disabled required="required">
+                                        <option disabled selected value display:none> -- Second choice -- </option>
+                                        {% for t in context.themes %}
+                                            <option value="{{t.getID}}">{{t.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                            <button class="btn btn-primary btn-lg" type="submit">Save</button>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+    {% endif %}
+    {% if context.ismoduleleader %}
+    <section class="row">
+        <div class="col-md-12">
+            <h2>Theme Admin</h2>
+        </div>
+        <div class="col-md-6">
+            <h4>Add a theme:</h4>
+            <form action="#" method="post">
+                <input type="text" class="form-control" required="required" name="themename" placeholder="Theme Name">
+                <select name="themeleader" required="required" class="form-control">
+                    <option disabled selected value display:none>Theme Leader</option>
+                    {% for u in siteinfo.users if context.isleader(u.id) %}
+                        <option value="{{u.getID}}">{{u.login}}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary">Add Theme</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h4>Delete a theme:</h4>
+            <form action="#" method="post">
+                <select name="delthemeid" required="required" class="form-control">
+                    <option disabled selected value display:none>Theme Name</option>
+                    {% for t in context.themes %}
+                        <option value="{{t.getID}}">{{t.name}}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-danger">Delete Theme</button>
+            </form>
+        </div>
+    </section>
+    {% endif %}
+{% endblock main %}
+
+{% block footer %}
+{% endblock footer %}

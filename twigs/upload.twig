@@ -1,0 +1,37 @@
+{% extends 'page.twig' %}
+
+{% import 'form.twig' as f %}
+
+{% block header %}
+    <div class="col-md-12">
+	<h1>Upload</h1>
+    </div>
+{% endblock header %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+	    <form action="#" method="post" role="form" enctype="multipart/form-data">
+		<div class="form-group">
+		    <label for="f0" class="control-label">File</label>
+		    <input type="file" id="f0" name="uploads[]" class="form-control" required="required"/>
+            <label for="desc" class="control-label">Project Title</label>
+            <input type="text" id="desc" class="form-control" required="required" name="description" placeholder="Title">
+            <p>Hidden
+            <input type="checkbox" data-toggle="toggle" name="hidden"></p>
+            <p>Theme</p>
+            <select name='theme'>
+                {% for t in context.themeStaff(context.user.getID) %}
+                    <option value="{{t.theme_id}}">{{context.getThemeName(t.theme_id)}}</option>
+                {% endfor %}
+            </select>
+		</div>
+		<button class="btn btn-primary" type="submit">Upload</button>
+	    </form>
+        </div>
+    </div>
+{% endblock main %}
+
+
+{% block pagefooter %}
+{% endblock pagefooter %}

@@ -1,0 +1,27 @@
+
+
+/*------------------------------------*\
+    Things used everywhere
+\*------------------------------------*/
+body {
+    font-family: sans-serif;
+    background: #e8f5e9;
+}
+
+
+/*------------------------------------*\
+    For the /admin pages
+\*------------------------------------*/
+
+/**
+ * Used for delete buttons
+ */
+.delb {
+    color: red;
+}
+
+.actb, .admb, .delb, .devb, .fixed {
+    cursor: pointer;
+}
+
+.noconfirm { color: red; }

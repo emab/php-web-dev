@@ -1,0 +1,100 @@
+{% extends 'page.twig' %}
+
+{% block onload %}
+{% endblock onload %}
+
+{% block header %}
+{% endblock header %}
+
+{% block main %}
+    <section class="row">
+        <div class="col-md-5">
+            <h2>Selection</h2>
+        </div>
+        {% if context.ismoduleleader %}
+        <div class="col-md-8 col-md-offset-2">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            Student Name
+                        </th>
+                        <th>
+                            Choices
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in siteinfo.users if context.hasMadeChoice(u.id) and not context.hasFinalChoice(u.id) %}
+                        <tr>
+                            <td>
+                                {{u.login}}
+                            </td>
+                            <form action="#" method="post">
+                                <input type="hidden" name="userid" value="{{u.id}}">
+                                <td>
+                                <select name="choice" required="required">
+                                <option disabled selected value display:none> -- Choose a theme -- </option>
+                                    {% for choice in context.userChoices if choice.user_id == u.id %}
+                                            <option value="{{choice.theme_id}}"/>{{choice.rank}}: {{context.getThemeName(choice.theme_id)}}
+                                    {% endfor %}
+                                </td>
+                                    <td>
+                                        <button class="btn btn-primary" type="submit">Save</button>
+                                    </td>
+                            </form>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        {% if context.isthemeleader %}
+        <div class="col-md-8 col-md-offset-2">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            Student Name
+                        </th>
+                        <th>
+                            Theme
+                        </th>
+                        <th>
+                            Supervisor
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                        {% for u in context.finalChoices if not context.hasGotSupervisor(u.user_id) and context.checkThemeStaff(context.user.getID, u.theme_id) %}
+                            <tr>
+                                <td>
+                                    {{context.getUserLogin(u.user_id)}}
+                                </td>
+                                <td>
+                                    {{context.getThemeName(context.getUserTheme(u.user_id))}}
+                                </td>
+                                <form action="#" method="post">
+                                    <input type="hidden" name="userid" value="{{u.user_id}}">
+                                    <td>
+                                    <select name="supervisor" required="required">
+                                    <option disabled selected value display:none> -- Choose a supervisor -- </option>
+                                        {% for s in siteinfo.users if context.issupervisor(s.id) %}
+                                            <option value="{{s.id}}"/> {{s.login}}
+                                        {% endfor %}
+                                    </td>
+                                        <td>
+                                            <button class="btn btn-primary" type="submit">Save</button>
+                                        </td>
+                                </form>
+                            </tr>
+                        {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </section>
+{% endblock main %}
+
+{% block footer %}
+{% endblock footer %}

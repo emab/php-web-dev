@@ -1,0 +1,59 @@
+{% extends 'page.twig' %}
+
+{% block onload %}
+{% endblock onload %}
+
+{% block header %}
+
+{% endblock header %}
+
+{% block main %}
+{% set user_id = context.user.getID %}
+    <section class="row">
+        <div class="col-md-5">
+            <h2>Welcome {{context.user.login}}</h2>
+        </div>
+        <div class="col-md-8 col-md-offset-1">
+        {% if context.isprojectstudent %}
+            <p>If you would like to change your selection, please visit the <a href="{{base}}/themes">theme selection</a> page.</p>
+            {% if context.hasMadeChoice(user_id) %}
+                <h4>Your selected themes:</h4>
+                {% for c in context.user.choices %}
+                    {% for t in context.themes if c.theme_id == t.id %}
+                        <p>{{c.rank}}: {{t.name}}</p>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            {% if context.hasFinalChoice(user_id) %}
+                <h4>Theme you have been allocated:</h4>
+                {% for fc in context.finalChoices if fc.user_id == user_id %}
+                    {% for t in context.themes if fc.theme_id == t.id %}
+                    <p>{{t.name}}</p>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            {% if context.hasGotSupervisor(user_id) %}
+                <h4>Your supervisor is:</h4>
+                {% for fc in context.finalChoices if fc.user_id == user_id %}
+                    <p>{{context.getUserLogin(fc.supervisor_id)}}</p>
+                    <p>{{context.getUserEmail(fc.supervisor_id)}}</p>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+        {% if context.ismoduleleader %}
+            <p>You have {{context.usersNeedChoice}} student(s) whose choice needs to be finalised.</p>
+        {% endif %}
+        {% if context.isthemeleader %}
+            {% for t in context.themeStaff(user_id)%}
+                <p>You have {{context.usersNeedSupervisor(t.theme_id)}} student(s) whose supervisor needs to be finalised for {{context.getThemeName(t.theme_id)}}</p>
+            {% endfor %}
+        {% endif %}
+        {% if context.isprojectsupervisor %}
+            <p>You are currently supervising {{context.user.issupervising}} student(s).</p>
+        {% endif %}
+        </div>
+    </section>
+{% endblock main %}
+
+{% block footer %}
+{% endblock footer %}

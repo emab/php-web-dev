@@ -1,0 +1,26 @@
+{% extends 'page.twig' %}
+
+{# this brings in some useful macros for making forms
+{% import 'form.twig' as f %}
+#}
+
+{% block title %}
+   {{conext.user.login}} Profile
+{% endblock title %}
+
+{% block pageheader %}
+{% endblock pageheader %}
+
+{% block main %}
+    <section class="row">
+        <div class="col-md-offset-2 col-md-10">
+	        <h2>{{context.user.login}}</h2>
+	            <p>
+                  {{context.user.email}}
+              </p>
+        </div>
+    </section>
+{% endblock main %}
+
+{% block pagefooter %}
+{% endblock pagefooter %}

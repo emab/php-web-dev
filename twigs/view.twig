@@ -1,0 +1,52 @@
+{% extends 'page.twig' %}
+
+{% block onload %}
+{% endblock onload %}
+
+{% block header %}
+{% endblock header %}
+
+{% block main %}
+    <section class="row">
+        <div class="col-md-12">
+            <h2>Your students</h2>
+        </div>
+    </section>
+    <section class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <table class="table">
+                <thead>
+                    <th>
+                        Student Name
+                    </th>
+                    <th>
+                        E-mail
+                    </th>
+                    <th>
+                        Theme
+                    </th>
+                </thead>
+                <tbody>
+                    {% for fc in context.finalChoices if fc.supervisor_id == context.user.getID %}
+                        {% for u in siteinfo.users if fc.user_id == u.id %}
+                            <tr>
+                                <td>
+                                    {{u.login}}
+                                </td>
+                                <td>
+                                    {{u.email}}
+                                </td>
+                                <td>
+                                    {{context.getThemeName(fc.theme_id)}}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock main %}
+
+{% block footer %}
+{% endblock footer %}
